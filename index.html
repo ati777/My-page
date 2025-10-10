@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Main window title -->
+    <title>mainpage</title>
+    <meta name="description" content="Personal portfolio of Attila: projects, experience, and contact." />
+
+    <!-- Search engine helpers copy/paste standard -->
+    <meta property="og:title" content="Attila — Portfolio" />
+    <meta property="og:description" content="Projects, experience, and contact." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://example.com" />
+    <meta property="og:image" content="/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.ico" />
+
+    <style>
+      /* ===== CSS RESET ===== */
+      *, *::before, *::after { box-sizing: border-box }
+      html:focus-within { scroll-behavior: smooth }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.6;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+      }
+      img, picture, svg, video { display: block; max-width: 100% }
+      input, button, textarea, select { font: inherit }
+
+      /* ===== THEME TOKENS (dark / light mode variables) ===== */
+      :root {
+        --bg:#0b0c0f; --panel:#13151a; --muted:#9aa3af; --text:#e5e7eb;
+        --brand:#7c5cff; --brand-700:#6b46ff; --ring:#9ca3af; --code:#0e1116;
+      }
+      @media (prefers-color-scheme:light) {
+        :root {
+          --bg:#f8fafc; --panel:#ffffff; --muted:#475569; --text:#0f172a;
+          --brand:#5b6cff; --brand-700:#4452ff; --ring:#94a3b8; --code:#0b1220;
+        }
+      }
+
+      /* ===== BASE ELEMENTS ===== */
+      body { background: var(--bg); color: var(--text) }
+      a { color: var(--brand); text-decoration: none }
+      a:hover { text-decoration: underline }
+      /* Prevent underline on button-style links */
+      .btn, .btn:hover { text-decoration: none }
+
+      /* ===== CONTAINER & LAYOUT HELPERS ===== */
+      .container { max-width: 1100px; margin-inline: auto; padding: 1.25rem }
+      .grid { display: grid; gap: 1rem }
+      @media(min-width:768px){ .grid-2 { grid-template-columns: 1.1fr .9fr } }
+      @media(min-width:960px){ .grid-3 { grid-template-columns: repeat(3,1fr) } }
+
+      /* ===== HEADER & NAVIGATION ===== */
+      header {
+        position: sticky; top: 0;
+        background: linear-gradient(to bottom, var(--bg), color-mix(in oklab, var(--bg), transparent 25%));
+        backdrop-filter: saturate(150%) blur(8px);
+        border-bottom: 1px solid color-mix(in oklab, var(--ring), transparent 70%);
+        z-index: 10;
+      }
+      .nav { display: flex; align-items: center; justify-content: space-between; padding: .75rem 0 }
+      .nav a { margin-left: 1rem }
+
+      /* ===== BUTTONS ===== */
+      .btn {
+        display: inline-flex; align-items: center; gap: .5rem;
+        border: 1px solid color-mix(in oklab, var(--ring), transparent 50%);
+        background: var(--panel); color: var(--text);
+        padding: .5rem .9rem; border-radius: .75rem;
+      }
+      .btn:hover { border-color: var(--ring) }
+      .btn.primary {
+        background: linear-gradient(90deg, var(--brand), var(--brand-700));
+        border: none;
+      }
+
+      /* ===== CARDS & TAGS ===== */
+      .card {
+        background: var(--panel);
+        border: 1px solid color-mix(in oklab, var(--ring), transparent 70%);
+        border-radius: 1rem;
+        padding: 1rem;
+      }
+      .tag {
+        font-size: .8rem;
+        border: 1px solid color-mix(in oklab, var(--ring), transparent 40%);
+        padding: .15rem .5rem;
+        border-radius: .5rem;
+      }
+      .code {
+        background: var(--code);
+        padding: .25rem .45rem;
+        border-radius: .45rem;
+        border: 1px solid color-mix(in oklab, var(--ring), transparent 60%);
+      }
+
+      /* ===== TEXT UTILITIES ===== */
+      .muted { color: var(--muted) }
+      .sr-only {
+        position: absolute; width: 1px; height: 1px;
+        padding: 0; margin: -1px; overflow: hidden;
+        clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+      }
+
+      /* ===== FOOTER ===== */
+      footer {
+        border-top: 1px solid color-mix(in oklab, var(--ring), transparent 70%);
+        padding: 2rem 0;
+        margin-top: 3rem;
+      }
+
+      /* ===== ANIMATIONS ===== */
+      @keyframes fade {
+        from { opacity: 0; transform: translateY(6px) }
+        to   { opacity: 1; transform: none }
+      }
+      [data-animate] { animation: fade .5s ease both }
+
+      /* ===== ACCESSIBILITY: SKIP LINK ===== */
+      .skip {
+        position: fixed;
+        inset: auto auto auto 1rem;
+        transform: translateY(-150%);
+        transition: transform .2s;
+        z-index: 1000;
+      }
+      .skip:focus { transform: none }
+
+      /* ===== LAB EXTRAS: BADGE + PROGRESS ===== */
+      .badge {
+        font-size:.75rem;
+        padding:.1rem .5rem;
+        border-radius:.5rem;
+        border:1px solid color-mix(in oklab,var(--ring),transparent 40%);
+      }
+      .badge-wip { background: color-mix(in oklab, var(--brand), transparent 85%); }
+
+      .progress {
+        height:8px; border-radius:9999px; overflow:hidden;
+        background: color-mix(in oklab, var(--ring), transparent 85%);
+        border:1px solid color-mix(in oklab, var(--ring), transparent 70%);
+      }
+      .progress > span {
+        display:block; height:100%;
+        background: linear-gradient(90deg, var(--brand), var(--brand-700));
+      }
+    </style>
+</head>
+
+<body>
+  <a class="skip btn" href="#main">Skip to content</a>
+
+  <header>
+    <div class="container nav" role="navigation" aria-label="Main">
+      <strong>Lab</strong>
+      <nav>
+             <a class="btn" href="https://linkedin.com/in/your-handle" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="https://facebook.com/your-handle" target="_blank" rel="noopener">Facebook</a>
+          <a class="btn" href="https://github.com/your-username" target="_blank" rel="noopener">GitHub</a>
+
+        <button id="theme-toggle" class="btn" type="button" aria-pressed="false" aria-label="Toggle dark mode">🌗</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <!-- Hero -->
+    <section class="grid grid-2" style="margin-top:1.2rem" data-animate>
+      <div>
+        <h1 style="line-height:1.15;margin:.25rem 0 0">Attila's Coding Lab<br/>Work in progress: projects, tests, and experiments.</h1>
+        <p class="muted">
+                        The goal is to turn this website into my main lab and test platform 
+                        where I can share and document personal projects. 
+                        </p>
+
+        <!-- Links row: About, LinkedIn, Facebook, GitHub, CV, See projects -->
+        <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.8rem">
+            <a class="btn primary" href="#projects">See projects</a>
+            <a class="btn" href="/Attila-CV.pdf">Download CV</a>
+        </div>
+      </div>
+
+        <!-- Right column card -->
+    <div class="card" aria-hidden="true" style="padding:.75rem">
+    <div class="muted" style="font-size:.85rem">Priorities </div>
+    <ul style="margin:.5rem 0 0 1rem">
+        <li>Practicing CS fundamentals</li>
+        <li>Exploring new technologies</li>
+        <li>Prototyping small systems</li>
+        <li>Building personal projects</li>
+    </ul>
+    </div>
+    </section>
+
+   
+
+    <!-- About -->
+    <section id="about" style="margin-top:2rem" data-animate>
+      <h2>About</h2>
+      <p>
+        I have been working as a chef since 2017, then in 2021 I decided to finish my studies and moved to part-time. Currently I am a CS graduate (2:1, 2025) London.
+        I made the shift into tech because I’ve always enjoyed problem-solving and working with systems.
+    </p>
+    <p>
+        Right now my main focus is to practice CS fundamentals, build small projects as practice and to demonstrate my skills. I am working with Python, Java and Linux, alongside experimenting
+        with malware analysis and reward-based AI simulations. This site is my personal lab — 
+        a place to practice, document progress, and share projects as I learn.
+    </p>
+      
+
+
+        <!-- Projects Preview (placeholder) -->
+    <section id="projects" style="margin-top:2rem" data-animate>
+    <h2>Projects Preview</h2>
+    <div class="grid grid-3" style="margin-top:1rem">
+        <article class="card" style="text-align:center; padding:2rem">
+        <p class="muted">Coming soon</p>
+        </article>
+        <article class="card" style="text-align:center; padding:2rem">
+        <p class="muted">Coming soon</p>
+        </article>
+        <article class="card" style="text-align:center; padding:2rem">
+        <p class="muted">Coming soon</p>
+        </article>
+    </div>
+    </section>
+
+
+         <!-- War Simulation (placeholder) -->
+    <section id="war-sim" style="margin-top:1.2rem" data-animate>
+    <article class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem">
+        <h2 style="margin:0"> simulation display</h2>
+        <span class="badge badge-wip">Work in progress</span>
+        </div>
+    </article>
+    </section>
+
+
+
+
+
+
+    <!-- Contact -->
+    <section id="contact" style="margin-top:2rem" data-animate>
+      <h2>Contact</h2>
+      <p class="muted">email</p>
+      <form id="contact-form" class="card" name="contact" netlify>
+        <label> Your email
+          <input name="email" type="email" required placeholder="you@example.com" style="display:block;width:100%;margin-top:.3rem;padding:.6rem;border-radius:.6rem;border:1px solid color-mix(in oklab,var(--ring),transparent 50%);background:transparent;color:inherit" />
+        </label>
+        <label style="display:block;margin-top:.8rem"> Message
+          <textarea name="message" required rows="5" placeholder="Tell me about your project…" style="display:block;width:100%;margin-top:.3rem;padding:.6rem;border-radius:.6rem;border:1px solid color-mix(in oklab,var(--ring),transparent 50%);background:transparent;color:inherit"></textarea>
+        </label>
+        <div style="display:flex;justify-content:flex-end;margin-top:.8rem">
+          <button class="btn primary" type="submit">Send</button>
+        </div>
+        <p id="form-status" class="muted" role="status" aria-live="polite" style="margin:.6rem 0 0 .2rem"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <small class="muted">© <span id="year"></span> ...</small>
+    </div>
+  </footer>
+
+  <script>
+    // Persisted theme toggle (no framework)
+    const themeBtn = document.getElementById('theme-toggle');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const setTheme = (mode)=>{
+      document.documentElement.dataset.theme = mode;
+      themeBtn.setAttribute('aria-pressed', mode === 'dark');
+      localStorage.setItem('theme', mode);
+      document.documentElement.style.colorScheme = mode;
+    };
+    const saved = localStorage.getItem('theme');
+    setTheme(saved || (prefersDark.matches ? 'dark' : 'light'));
+    themeBtn.addEventListener('click',()=>{
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    });
+    prefersDark.addEventListener('change', (e)=>{
+      if(!localStorage.getItem('theme')) setTheme(e.matches ? 'dark' : 'light');
+    });
+
+    // Small UX: fade in sections when visible
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.style.viewTransitionName = 'fade'; }});
+    }, {threshold:.2});
+    document.querySelectorAll('[data-animate]').forEach(el=>io.observe(el));
+
+    // Contact form (demo-only; prevents page reload)
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+    form?.addEventListener('submit',(ev)=>{
+      ev.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      // In real deployment, POST to your backend endpoint here.
+      status.textContent = `Thanks, ${data.email}! I\'ll get back to you soon.`;
+      form.reset();
+    });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
